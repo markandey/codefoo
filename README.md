@@ -1,6 +1,12 @@
 # Sublime Text 2: codefoo plugin
 
-If you are looking for code snippet from web , do not leave the browser simply type the query and select press ctrl+alt+r
+If you are looking for code snippet from web , do not leave the browser simply 1)type the query, 2)select and 3)press `ctrl+alt+r`
+try these
+ 
+ * email validation regex
+ * url validation in javascript
+ * reversing a string in javascript
+ * Slide To Unlock CSS 
 
 
 
