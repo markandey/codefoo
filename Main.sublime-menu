@@ -1,0 +1,10 @@
+[  
+    {  
+        "id": "selection",  
+        "children":  
+        [  
+            {"id": "codefoo"},  
+            { "command": "codefoo", "caption": "CodeFoo: Expand to code"}  
+        ]  
+    }  
+]
