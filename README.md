@@ -1,7 +1,12 @@
 # Sublime Text 2: codefoo plugin
 
-If you are looking for code snippet from web , do not leave the browser simply 1)type the query, 2)select and 3)press `ctrl+alt+r`
-try these
+This plugin helps you in retrieving code snippet from web
+If you are looking for code snippet from web, do not leave the browser simply 
+     1. type the query
+     2. select
+     3. press `ctrl+alt+r`
+
+try with these query 
  
  * email validation regex
  * url validation in javascript
