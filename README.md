@@ -1,7 +1,8 @@
 # Sublime Text 2: codefoo plugin
 
 This plugin helps you in retrieving code snippet from web
-If you are looking for code snippet from web, do not leave the browser simply 
+
+Do not leave the browser simply get in 3 easy steps
 
  1. type the query
  2. select
