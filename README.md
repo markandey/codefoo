@@ -16,6 +16,7 @@ try with these query
  * Slide To Unlock CSS 
 
 
+![Code Foo Demo](https://raw.github.com/markandey/markandey.github.com/master/images/code-foo.gif)
 
 # Installation
 
