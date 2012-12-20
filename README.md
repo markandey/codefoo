@@ -17,6 +17,7 @@ try with these query
 
 
 ![Code Foo Demo](https://raw.github.com/markandey/markandey.github.com/master/images/code-foo.gif)
+   [Demo Screencast](http://www.youtube.com/watch?v=CK8ZoYAi_ss)
 
 # Installation
 
