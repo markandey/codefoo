@@ -18,17 +18,30 @@ class CodefooCommand(sublime_plugin.TextCommand):
             thread.start()
             self.handle_threads(edit, threads)
     def injectResult(self,edit,sel,result):
-        resultDump=result["query"]["results"]["results"]
-        code=resultDump["code"]
-        bossresponse=resultDump["info"]["results"]["bossresponse"]["web"]["results"]["result"];
-        abstract=bossresponse["abstract"]['content'];
-        clickurl=bossresponse["clickurl"];
+        try:
+            dump=result["query"]["results"]
+            resultDump=dump["results"]
+            code=resultDump["code"]
+            if code == 'Sorry! service is down':
+                raise;
+            try:
+                bossresponse=resultDump["info"]["bossresponse"]["web"]["results"]["result"];
+                abstract=bossresponse["abstract"]['content'];
+                clickurl=bossresponse["clickurl"];
+            except:
+                bossresponse=""
+                abstract=""
+                clickurl=""
+        except:
+            self.view.set_status('foo',"Sorry!!!!! API rate limit Exceeded ......");
+            return 
+
         output=""
         output=output+'\n#################################################\n';
         output=output+"Description: "+abstract;
         output=output+"\nURL: "+clickurl;
         output=output+'\n#################################################\n';
-        output=output+resultDump["code"];
+        output=output+code;
         output=output+'\n#################################################\n';
         self.view.replace(edit,sel,output);
         self.view.run_command('toggle_comment') 
@@ -59,7 +72,7 @@ class CodefooCommand(sublime_plugin.TextCommand):
 
             self.view.end_edit(edit)
 
-            self.view.erase_status('foo')
+            #self.view.erase_status('foo')
             selections = len(self.view.sel())
             sublime.status_message('Foo  loaded for %s selection%s' %(selections, '' if selections == 1 else 's'))
 
@@ -78,6 +91,7 @@ class FooIOThread(threading.Thread):
                 headers={"User-Agent": "Foo"})
             http_file = urllib2.urlopen(request, timeout=self.timeout)
             self.result = json.loads(http_file.read());
+            print self.result;
             return
         except (urllib2.HTTPError) as (e):
             err = '%s: HTTP error %s contacting API' % (__name__, str(e.code))
