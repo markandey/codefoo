@@ -9,52 +9,97 @@
         <key id='q' type='xs:string' paramType='path' required="true" />  
       </inputs>  
       <execute><![CDATA[
-         y.env("store://iYcgoXYc52g4Ju0YhYeqIS");
-         function getXPath(url) {
-            if (url.indexOf('http://www.w3schools.com/') >= 0) {
-                return '//div[@class="example_code notranslate"]';
-            }
-            if (url.indexOf('http://www.php.net/') >= 0 || url.indexOf('http://php.net/') >= 0) {
-                return '//div[@class="phpcode"]';
-            }
-            return '//pre';
-        
-        }
-        
-        function getResult(query) {
-            try {
-                var con = query.bossresponse.web.results.result[0]['abstract'];
-                var url = query.bossresponse.web.results.result[0].clickurl;
-
-            } catch (e) {
-              var con = query.bossresponse.web.results.result['abstract'];
-              var url = query.bossresponse.web.results.result.clickurl;
-            }
-            var xpath = getXPath(url);
-            var htmlParam = {
-                        'url': url,
-                        'xpath': xpath
-            };
-            var output=y.query("select * from html where url=@url and xpath=@xpath limit 5;", htmlParam);
-            var code=''+y.jsonToXml(y.xmlToJson(output.results));
-            code=code.replace(/<br>/gi, "\n");
-            code=code.replace(/<p.*?>/gi, "\n");
-            code=code.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ");
-            code=code.replace(/<style.*?>.+?<\/style>/gi, "");
-            code=code.replace(/<script.*?>.+?<\/script>/gi, "");
-            code=code.replace(/<class.*?>.+?<\/class>/gi, "");
-            code=code.replace(/<xml:space.*?>.+?<\/xml:space>/gi, "");
-            code=code.replace(/<(?:.|\n)*?>/gm, '');
-            code=code.replace(/\n\s*\n+/gm, '\n');
-            code=code.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, '\'');
-            return y.jsonToXml({"results":{"info": y.xmlToJson(query),"code": code}});
-        }  
-          
-          var param={
-          "q":q
-        };
-        var output=y.query("select * from boss.search where q=@q and count=1", param);
-        response.object = getResult(output.results); 
+             y.env("store://iYcgoXYc52g4Ju0YhYeqIS");
+             function getXPath(url) {
+               if (!url) {
+                 return '//pre';
+               }
+               try {
+                 if (url.indexOf('http://www.w3schools.com/') >= 0) {
+                   return '//div[@class="example_code notranslate"]';
+                 }
+                 if (url.indexOf('http://www.php.net/') >= 0 || url.indexOf('http://php.net/') >= 0) {
+                   return '//div[@class="phpcode"]';
+                 }
+                 return '//pre';
+               } catch (e) {
+                 return '//pre';
+               }
+            
+             }
+            
+            
+             function getResult(query) {
+               query = query.results;
+               var con = '',
+                 url = '',
+                 xpath, htmlParam, sdown = {
+                   "results": {
+                     "info": 'Sorry! Service is down',
+                     "code": 'Sorry! service is down'
+                   }
+                 };
+               try {
+                 try {
+                   con = query.bossresponse.web.results.result[0]['abstract'];
+                   url = query.bossresponse.web.results.result[0].clickurl;
+            
+                 } catch (e) {
+                   con = query.bossresponse.web.results.result['abstract'];
+                   url = query.bossresponse.web.results.result.clickurl;
+                 }
+               } catch (e) {
+                 url = "";
+               }
+               
+               y.log(query);
+               y.log(url);
+             
+               
+            
+               
+            
+               
+            
+               url = url.replace(/^\s*|\s*$/g, '');
+               
+               if (url === undefined || url === null || url === '') {
+                 return y.jsonToXml(sdown);
+               }
+              
+               xpath = getXPath(url);
+               
+               htmlParam = {
+                 'url': url,
+                 'xpath': xpath
+               };
+            
+               var output = y.query("select * from html where url=@url and xpath=@xpath limit 5;", htmlParam);
+               
+               var code = '' + y.jsonToXml(y.xmlToJson(output.results));
+               code = code.replace(/<br>/gi, "\n");
+               code = code.replace(/<p.*?>/gi, "\n");
+               code = code.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ");
+               code = code.replace(/<style.*?>.+?<\/style>/gi, "");
+               code = code.replace(/<script.*?>.+?<\/script>/gi, "");
+               code = code.replace(/<class.*?>.+?<\/class>/gi, "");
+               code = code.replace(/<xml:space.*?>.+?<\/xml:space>/gi, "");
+               code = code.replace(/<(?:.|\n)*?>/gm, '');
+               code = code.replace(/\n\s*\n+/gm, '\n');
+               code = code.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, '\'');
+               return y.jsonToXml({
+                 "results": {
+                   "info": query.results,
+                   "code": code
+                 }
+               });
+             }
+            
+             var param = {
+               "q": q
+             };
+             var output = y.query("select * from boss.search where q=@q and count=1", param);
+             response.object = getResult(y.xmlToJson(output.results)); 
       ]]></execute>  
     </select>  
   </bindings>  
