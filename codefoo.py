@@ -33,7 +33,7 @@ class CodefooCommand(sublime_plugin.TextCommand):
                 abstract=""
                 clickurl=""
         except:
-            self.view.set_status('foo',"Sorry!!!!! API rate limit Exceeded ......");
+            self.view.set_status('foo',"Sorry!!!!! API rate limit Exceeded ..., retry again!, We will fix soon.");
             return 
 
         output=""
